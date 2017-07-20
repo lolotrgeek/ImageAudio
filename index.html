@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>encode</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body{background:black;}
+        h1 {text-align:center;color:white;}
+        canvas{display:none;}
+    </style>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/encode.js"></script>
+
+</head>
+
+<body>
+    <video id="video" width="100vw" height="100vh" autoplay></video>
+    <canvas id="canvas"></canvas>
+
+    <script type="text/javascript">
+        
+        // Grab elements, create settings, etc.
+        var video = document.getElementById('video');
+
+        // Get access to the camera!
+        if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            // Not adding `{ audio: true }` since we only want video now
+            navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
+                video.src = window.URL.createObjectURL(stream);
+                video.play();
+            });
+        }
+
+    </script>
+</body>
+</html>
