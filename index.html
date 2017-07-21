@@ -9,6 +9,7 @@
         body{background:black;}
         h1 {text-align:center;color:white;}
         canvas{display:none;}
+        video{height:100%; width:100%;}
     </style>
     <script src="js/jquery.min.js"></script>
     <script src="js/encode.js"></script>
@@ -17,22 +18,50 @@
 
 <body>
     <video id="video" width="100vw" height="100vh" autoplay></video>
-    <canvas id="canvas"></canvas>
+    <canvas id="canvas" width="0" height="0"></canvas>
 
-    <script type="text/javascript">
-        
-        // Grab elements, create settings, etc.
-        var video = document.getElementById('video');
+    <script type="text/javascript">        
+        window.onload = function() {
 
-        // Get access to the camera!
-        if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-            // Not adding `{ audio: true }` since we only want video now
-            navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
-                video.src = window.URL.createObjectURL(stream);
-                video.play();
-            });
+        // Normalize the various vendor prefixed versions of getUserMedia.
+        navigator.getUserMedia = (navigator.getUserMedia ||
+                                    navigator.webkitGetUserMedia ||
+                                    navigator.mozGetUserMedia || 
+                                    navigator.msGetUserMedia);
+
         }
+        // Check that the browser supports getUserMedia.
+        // If it doesn't show an alert, otherwise continue.
+        if (navigator.getUserMedia) {
+        // Request the camera.
+        navigator.getUserMedia(
+            // Constraints
+            {
+            video: true
+            },
 
+            // Success Callback
+            function(localMediaStream) {
+                // Get a reference to the video element on the page.
+                var vid = document.getElementById('video');
+
+                // Create an object URL for the video stream and use this 
+                // to set the video source.
+                vid.src = window.URL.createObjectURL(localMediaStream);
+                loadCanvas()
+                getImageData();
+            },
+
+            // Error Callback
+            function(err) {
+            // Log the error to the console.
+            console.log('The following error occurred when trying to use getUserMedia: ' + err);
+            }
+        );
+
+        } else {
+        alert('Sorry, your browser does not support getUserMedia');
+        }
     </script>
 </body>
 </html>
