@@ -1,6 +1,6 @@
 function loadCanvas() {
     var canvas = document.getElementById('canvas');
-    var ctx = c.getContext("2d");
+    var ctx = canvas.getContext("2d");
     var video = document.getElementById('video');
 
     video.addEventListener('play', function() {
@@ -9,10 +9,13 @@ function loadCanvas() {
         if (!$this.paused && !$this.ended) {
             ctx.drawImage($this, 0, 0);
             setTimeout(loop, 1000 / 30); // drawing at 30fps
-            setInterval(getImageData(canvas,ctx), 1000 / 30 ); // encode at 30 fps  
-        }
+            setInterval(getImageData(canvas,ctx), 1000 / 30 ); // encode at 30 fps   
+        }        
         })();
+         
     }, 0);
+    
+    
 }
 
 function getImageData(canvas,ctx) {    
@@ -21,7 +24,7 @@ function getImageData(canvas,ctx) {
     var width = srcImgData.width;
     console.log ('Loading Canvas...' + width + height);
 
-    var durationSeconds = .05; // can be decimal (float)
+    var durationSeconds = 1; // can be decimal (float)
     var tmpData = [];
     var maxFreq = 0;
     var data = [];
@@ -57,9 +60,8 @@ function getImageData(canvas,ctx) {
         }
     }
     for (var i = 0; i < tmpData.length; i++) {
-        console.log('Encoding...' + tmpData[i]);
-        data.push(32767 * tmpData[i] / maxFreq); //32767
-        
+        console.log('Encoding...');
+        data.push(32767 * tmpData[i] / maxFreq); //32767        
     }
     
     var wave = new RIFFWAVE();
